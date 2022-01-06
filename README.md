@@ -1,6 +1,6 @@
 This is a python script that creates a simple desktop app that allows the user to type in birhdays of friends, familiy to get a reminder who has birthday next.
 
-I created this project to always remember who's birthday is next so I won't forget any :) However, I would just used it to safe nicknames since the database is not encrypted.
+I created this project to always remember who's birthday is next so I won't forget any :) However, I would just use it to save nicknames since the data is not encrypted.
 
 The user is able to add the name and birthday of a person, after opening the app again the person who has birthday next is shown (birthday, name, how many days left).
 Currently the app is in German.
