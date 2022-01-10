@@ -1,8 +1,8 @@
 ## This is a first draft for a page that shows a python script
 
 
-<pre>  &lt;link type="text/css" rel="stylesheet" href="rule.htm"&gt;
-</pre>
+<a href="rule.htm">
+</a>
 
 
 
