@@ -1,7 +1,7 @@
 ## This is a first draft for a page that shows a python script
 
 
-<pre>  &lt;link type="text/css" rel="stylesheet" href="test.css"&gt;
+<pre>  &lt;link type="text/css" rel="stylesheet" href="rule.htm"&gt;
 </pre>
 
 
