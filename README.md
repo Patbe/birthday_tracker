@@ -3,7 +3,7 @@
 
 <h1><strong>Birthday Tracker App</strong></h1>
 
-This is a python script that creates a simple desktop app that allows the user to type in birhdays of friends, familiy to get a reminder who has birthday next.
+This is a python script that creates a simple desktop app that allows the user to type in birthdays of friends, familiy to get a reminder who has birthday next.
 
 <a href='./bd2.py'>Link to the script</a>
 
