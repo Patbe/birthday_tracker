@@ -12,7 +12,7 @@ I created this project to always remember who's birthday is next so I won't forg
 The user is able to add the name and birthday of a person, after opening the app again the person who has birthday next is shown (birthday, name, how many days left).
 Currently the app is in German.
 
-The Data is saved and retrieved via a SQLite Database, the user interface is created by Tkinter.
+The Data is saved and retrieved via a SQLite Database, the user interface is created with Tkinter.
 
 This script could be improved by:
 - Add encryption
