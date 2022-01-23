@@ -2,7 +2,7 @@
 
 This is a python script that creates a simple desktop app that allows the user to type in birhdays of friends, familiy to get a reminder who has birthday next.
 
-<a href=#>Link to the app</a>
+<a href='./bd2.py'>Link to the script</a>
 
 I created this project to always remember who's birthday is next so I won't forget any. However, I would just use it to save nicknames since the data is not encrypted.
 
