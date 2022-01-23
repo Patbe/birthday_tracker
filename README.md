@@ -1,4 +1,7 @@
-<strong>Birthday Tracker App</strong>
+<html>
+  
+
+<h1><strong>Birthday Tracker App</strong></h1>
 
 This is a python script that creates a simple desktop app that allows the user to type in birhdays of friends, familiy to get a reminder who has birthday next.
 
@@ -16,3 +19,6 @@ This script could be improved by:
 - Add function to delete data or to view database without having to use a database browser
 
 ![image](https://user-images.githubusercontent.com/8615534/148412776-ee4a5d1c-5db5-4b67-8309-348e4c640260.png)
+  
+</html>
+
