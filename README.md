@@ -16,7 +16,7 @@ The Data is saved and retrieved via a SQLite Database, the user interface is cre
 
 This script could be improved by:
 - Add encryption
-- Add function to delete data or to view database without having to use a database browser
+- Add function to delete data or to view the database in the App without having to use a database browser
 
 ![image](https://user-images.githubusercontent.com/8615534/148412776-ee4a5d1c-5db5-4b67-8309-348e4c640260.png)
   
