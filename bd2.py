@@ -17,12 +17,22 @@ def clear():
 conn = sqlite3.connect('birthdays.sqlite')
 cur = conn.cursor()
 
+# If there is no table yet a new one will be created
+
+cur.execute('''CREATE TABLE IF NOT EXISTS birthdays (
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+name TEXT,
+birthday date)
+
+''')
+
+
 
 class Library:
 
     def __init__(self,root):
         self.root = root
-        self.root.title("Geburtstagskalender")
+        self.root.title("Geburtstagsreminder")
         self.root.geometry("500x400")          #1350x750+0+0
         self.root.configure(background = "#fff2cc")
 
@@ -39,7 +49,7 @@ class Library:
         new_date = StringVar()
 
         def iExit():
-            iExit = tkinter.messagebox.askyesno ("Geburtstagskalender","Programm verlassen?")
+            iExit = tkinter.messagebox.askyesno ("Geburtstagsreminder","Programm verlassen?")
             if iExit>0:
                 root.destroy()
                 return
@@ -47,21 +57,59 @@ class Library:
         def days_between(d1, d2):
             d1 = datetime.strptime(d1, "%Y-%m-%d")
             d2 = datetime.strptime(d2, "%Y-%m-%d")
-            return abs((d2 - d1).days)
+
+            if  ((d2 - d1).days) <0:
+                return ((d2 - d1).days) + 365
+
+            else:
+                return ((d2 - d1).days)
+
+
+        def check_empty_database():
+
+            # this function checks if the database is empty,
+            # if yes the variable trigger is set to false, so the main loop to check for birthdays will not be executed
+
+            global trigger
+
+            cur.execute("""
+
+            SELECT COUNT(*) FROM birthdays""")
+
+            counter = cur.fetchone()[0]
+
+            if counter == 0:
+                trigger = False
+            else:
+                trigger = True
+
 
         def getbdlist():
 
-            # fetch a list of all entries in the database
+            # fetch a list of all entries in the database, before check if database is empty
+
+            check_empty_database()
+
 
             cur.execute("""
 
             SELECT * FROM birthdays""")
-            newlist=list()
+
+
+
+
+            # bds_list is the list of all birthdays and persons in the table
+            # These values will be written into the variable bds_list
+
+            newlist= list()
+
             bds_list = cur.fetchall()
+
             for index in bds_list:
                 for i in index:
                     newlist.append(i)
-            print("\nInfo: there are " + str(int((len(newlist)/3))) + " entries in the database\n")
+
+            #print("\nInfo: there are " + str(int((len(newlist)/3))) + " entries in the database\n")
 
 
             # loop through the dates
@@ -69,67 +117,114 @@ class Library:
             index = 2
 
             lowest_days = None
-            while index <(len(newlist)):
-                #d1 = str('1970-01-01')
-                d_beginning_y = date(date.today().year, 1, 1)
-                d_beginning_y = str(d_beginning_y)
 
-                # get current year
-                d_splitted  = d_beginning_y.split("-")
-                current_year = int(d_splitted[0])
+            if trigger == True:
+                while index <(len(newlist)):
+                    #d1 = str('1970-01-01')
+                    d_beginning_y = date(date.today().year, 1, 1)
+                    d_beginning_y = str(d_beginning_y)
 
-                # get date 2 which is the birthday
+                    # get current year
+                    d_splitted  = d_beginning_y.split("-")
+                    current_year = int(d_splitted[0])
 
-                d_bd = newlist[index]
+                    # get the second date which is the birthday
 
-                splitted = d_bd.split("-")
-                intlist = list()
-                for i in splitted:
-                    if i == splitted[0]:
-                        intlist.append(current_year)
+                    d_bd = newlist[index]
+
+                    splitted = d_bd.split("-")
+                    intlist = list()
+                    for i in splitted:
+                        # when the index is equal to the first item get the current year as first value in the variable intlist
+                        # Because we want to replace the birth year with the current year
+                        if i == splitted[0]:
+                            intlist.append(current_year)
+                        else:
+                            intlist.append(int(i))
+
+
+
+                    d_bd_new = str(intlist[0])+ "-" +str(intlist[1])+ "-" + str(intlist[2])
+
+
+                    # get todays date
+
+                    d_today = str(date.today())
+
+                    # calculate difference between today and the new birthday (with current year)
+
+                    difference = days_between(d_today, d_bd_new)
+                    #print(difference)
+
+                    # the index variable is incremented by 3 because every third item in the list from the database is a birthday
+                    index += 3
+                    if lowest_days is None or difference < lowest_days:
+                        lowest_days = difference
+                        get_bd = d_bd
+
                     else:
-                        intlist.append(int(i))
-                d_bd_new = str(intlist[0])+ "-" +str(intlist[1])+ "-" + str(intlist[2])
+                        pass
+
+                # Select the closest birthday from the database
+
+                cur.execute(" SELECT * FROM birthdays WHERE birthday = ?", (get_bd,))
+
+                closest_bd = cur.fetchall()
 
 
-                # get todays date
 
-                d_today = str(date.today())
+                # Print out all names
 
-                difference = days_between(d_today, d_bd_new)
-                #print(difference)
+                lst = list()
 
-                index += 3
-                if lowest_days is None or difference < lowest_days:
-                    lowest_days = difference
-                    get_bd = d_bd
+                for index in closest_bd:
+                    for i in index:
+                        lst.append(i)
+
+
+
+                # create loop in case two birthdays are the same date
+                # the variable geburtstagskinder can either have one or two names
+                geburtsagskinder = str()
+
+                if len(closest_bd) > 1:
+
+                    # the indices are used to get the values name and birthday
+
+                    index = 1
+                    index_2 = 3
+
+                    while index_2 <=len(lst):
+                        #from the first index up until but not including the second index
+                        name_db =lst[index:index_2]
+                        name = name_db[0]
+                        bd = name_db[1]
+                        index +=3
+                        index_2 +=3
+                        geburtsagskinder = str(name) + ", " + geburtsagskinder
+
+                    #remove the last two characters from the string (remove the last comma)
+                    n = len(geburtsagskinder)
+                    geburtsagskinder = geburtsagskinder[:n-2]
+
+
+                # only one BD
 
                 else:
-                    pass
-
-            # Select the closest birthday from the database
-
-            cur.execute(" SELECT * FROM birthdays WHERE birthday = ?", (get_bd,))
-
-            closest_bd = cur.fetchall()
-
-            #print(closest_bd)
-
-            # Print out all names
-
-            lst = list()
-
-            for index in closest_bd:
-                for i in index:
-                    lst.append(i)
-            #print(lst)
-            name_bd = lst[1:]
-            name = name_bd[0]
-            bd = name_bd[1]
+                    name_bd = lst[1:]
+                    geburtsagskinder = name_bd[0]
+                    bd = name_bd[1]
 
 
-            geburtstagskind.set(str(name) + " " + str(bd))
-            days_till_bd.set(str(lowest_days))
+
+
+                geburtstagskind.set(str(geburtsagskinder) + " " + str(bd))
+                days_till_bd.set(str(lowest_days))
+
+            else:
+                pass
+
+
         getbdlist()
 
 
